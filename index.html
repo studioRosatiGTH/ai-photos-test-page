@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Photo Historical – Test Upload</title>
+</head>
+<body>
+  <h2>AI Photo Historical – Area Test</h2>
+
+  <form id="uploadForm">
+    <label>Carica una foto (volto singolo):</label><br>
+    <input type="file" id="photo" accept="image/*" required><br><br>
+
+    <label>Email (solo per test):</label><br>
+    <input type="email" id="email"><br><br>
+
+    <label>Stile:</label><br>
+    <select id="style">
+      <option value="rinascimento">Rinascimento</option>
+      <option value="700">Settecento Veneziano</option>
+    </select><br><br>
+
+    <button type="submit">Carica foto</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const file = document.getElementById("photo").files[0];
+      const email = document.getElementById("email").value;
+      const style = document.getElementById("style").value;
+
+      if (!file) {
+        alert("Carica un file.");
+        return;
+      }
+
+      document.getElementById("status").textContent = "Caricamento in corso...";
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("email", email);
+      formData.append("style", style);
+
+      const makeUrl = "https://hook.eu1.make.com/vaviq4y6id197goeenpx314icqjbgui0"; // <-- tuo webhook
+
+      const response = await fetch(makeUrl, {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        document.getElementById("status").textContent = "File inviato! Make.com ora lo processa.";
+      } else {
+        document.getElementById("status").textContent = "Errore nell'invio.";
+      }
+    });
+  </script>
+
+</body>
+</html>
